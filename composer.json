@@ -1,0 +1,30 @@
+{
+  "name": "clyancer/cy_mail_to_news",
+  "type": "typo3-cms-extension",
+  "license": "GPL-2.0-or-later",
+  "description": "Creates news from mails",
+  "authors": [
+    {
+      "name": "C. Gogolin",
+      "role": "Developer"
+    },
+    {
+      "name": "C. Gogolin",
+      "role": "Product Manager"
+    }
+  ],
+  "require": {
+    "typo3/cms-core": "^13.4",
+    "news" : "^12.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Cylancer\\CyMailToNews\\": "Classes/"
+    }
+  },
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "cymailtonews"
+    }
+  }
+}
