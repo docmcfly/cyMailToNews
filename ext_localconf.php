@@ -19,12 +19,12 @@ defined('TYPO3') || die();
 use Cylancer\CyMailToNews\Task\Mail2NewsAdditionalFieldProvider;
 use Cylancer\CyMailToNews\Task\Mail2NewsTask;
 
-$translationPath = 'LLL:EXT:cy_mail_to_news/Resources/Private/Language/locallang_task_alert2news.xlf';
+$translationPath = 'LLL:EXT:cy_mail_to_news/Resources/Private/Language/locallang_task_mail2news.xlf';
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][Mail2NewsTask::class] = [
     'extension' => 'cy_mail_to_news',
-    'title' => "$translationPath:task.alert2news.title",
-    'description' => "$translationPath:task.alert2news.description",
+    'title' => "$translationPath:task.mail2news.title",
+    'description' => "$translationPath:task.mail2news.description",
     'additionalFields' => Mail2NewsAdditionalFieldProvider::class
 ];
 

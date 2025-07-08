@@ -2,9 +2,9 @@
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Mails to news',
-    'description' => 'Creates news from alert mails',
+    'description' => 'Creates news from emails',
     'category' => 'plugin',
-    'version' => '0.9.0',
+    'version' => '0.9.1',
     'state' => 'beta',
     'clearCacheOnLoad' => 1,
     'author' => 'Clemens Gogolin',
