@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2019-11-29T21:51:04Z" product-name="cymailtonews">
+		<header />
+		<body>
+			<trans-unit id="task.mail2news.title">
+				<source>Mail to news creator</source>
+				<target state="tanslated">News aus E-Mail Erzeuger</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.description">
+				<source>Creates news from mails</source>
+				<target state="tanslated">Erzeugt News aus E-Mails</target>
+			</trans-unit>
+
+			<trans-unit id="task.mail2news.property.newsStoragePageId">
+				<source>News storoage page id</source>
+				<target state="tanslated">News-Speicher-Seiten-Id</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.draftMode">
+				<source>Create news as draft (disabled) </source>
+				<target state="tanslated">Erzeugen der News als Vorlage (deaktiviert)</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.titleTemplate">
+				<source>News title template</source>
+				<target state="tanslated">News-Überschrift</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.bodyTextTemplate">
+				<source>News text</source>
+				<target state="tanslated">News-Text</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.filterRules">
+				<source>Filter rules</source>
+				<target state="tanslated">Filterregeln</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.categoryRules">
+				<source>Category rules</source>
+				<target state="tanslated">Kategorie-Regeln</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.imapServer">
+				<source>IMAP server name</source>
+				<target state="tanslated">IMAP-Servername</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.imapPort">
+				<source>IMAP server port</source>
+				<target state="tanslated">IMAP-Server-Port </target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.imapAccount">
+				<source>IMAP server account name</source>
+				<target state="tanslated">IMAP-Server-Account</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.imapPassword">
+				<source>IMAP server password</source>
+				<target state="tanslated">IMAP Serverpassword</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.importAttachmnents">
+				<source>Import the attachments as news media?</source>
+				<target state="tanslated">Mail-Anhänge als News-Medien importieren?</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.fileStorage">
+				<source>File storage to use (if value is empty or 0 then the task uses the default file storage)</source>
+				<target state="tanslated">Zu verwendener Dateispeicher (wenn leer oder 0 eingeben wurde, wird der Standard-Dateispeicher verwendet)</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.attachmentFolder">
+				<source>Storage folder for the imported attachments</source>
+				<target state="tanslated">Speicher-Ordner der importierten Anhänge</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.defaultMedia">
+				<source>Default media (This media is added to all new news but the mail has none attachment or the attachment import is disabled)</source>
+				<target state="tanslated">Standard-Medium (Diese Medium wird an alle neuen News hinzugefügt, wenn der Anhang-Import ist abgeschaltet ist oder die Mail keine Anhänge enthält)</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.allowedAttachmentTypes">
+				<source>Allowed file type for the attachment import</source>
+				<target state="tanslated">Erlaubte Datei-Typen für den Anhang-Import</target>
+			</trans-unit>
+
+			<trans-unit id="task.mail2news.property.error.invalid.newsStoragePageId">
+				<source>Invalid news storoage page id.</source>
+				<target state="tanslated">Ungültige News-Speicher-Seiten-Id.</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.error.required.newsStoragePageId">
+				<source>News storoage page id is required.</source>
+				<target state="tanslated">Der News-Speicher-Seiten-Id ist verpflichtend.</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.error.required.newsDummyText">
+				<source>News dummy text is required.</source>
+				<target state="tanslated">Der News-Dummy-Text ist verpflichtend.</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.error.required.categoryRules">
+				<source>The category rules are required.</source>
+				<target state="tanslated">Die Kategorie-Regeln ist verpflichtend.</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.error.jsonInvalid.categoryRules">
+				<source>The category rules have not an valid json format.</source>
+				<target state="tanslated">Die Kategorie-Regeln haben kein gültiges JSON-Format.</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.error.categoryUidNotFound.categoryRules">
+				<source>A category with the UID % not found.</source>
+				<target state="tanslated">Keine Kategorie mit der UID %s nicht gefunden.</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.error.wrongRuleDeclaration.categoryRules">
+				<source>The declaration of the category rules is incorrect. Format: [ 'subject|content' =&gt; 'regular expression' ]</source>
+				<target state="tanslated">Die Deklaration der Kategorie-Regeln ist falsch. Format: [ 'subject|content' =&gt; 'regulärer Ausdruck' ]</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.error.invalidRule.categoryRules">
+				<source>The rules (regular expression) %s are invalid.</source>
+				<target state="tanslated">Die Regel (Regulärer Ausdruck) %s ist ungültig.</target>
+			</trans-unit>
+
+			<trans-unit id="task.mail2news.property.error.jsonInvalid.filterRules">
+				<source>The filter rules have not an valid json format.</source>
+				<target state="tanslated">Die Filter-Regeln haben kein gültiges JSON-Format.</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.error.invalidRule.filterRules">
+				<source>The rules (regular expression) %s are invalid.</source>
+				<target state="tanslated">Die Regel (Regulärer Ausdruck) %s ist ungültig.</target>
+			</trans-unit>
+
+
+			<trans-unit id="task.mail2news.property.error.required.imapServer">
+				<source>The imap server name is required.</source>
+				<target state="tanslated">Der Imap-Servername ist verpflichtend.</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.error.required.imapPort">
+				<source>The imap port is required.</source>
+				<target state="tanslated">Der Imap-Serverport ist verpflichtend.</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.error.required.imapName">
+				<source>The imap server account name is required.</source>
+				<target state="tanslated">Der Imap-Account ist verpflichtend.</target>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.error.required.imapPassword">
+				<source>The imap password is required.</source>
+				<target state="tanslated">Das Imap-Serverpasswort ist verpflichtend.</target>
+			</trans-unit>
+
+
+		</body>
+	</file>
+</xliff>
