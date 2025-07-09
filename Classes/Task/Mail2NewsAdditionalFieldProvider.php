@@ -47,7 +47,7 @@ class Mail2NewsAdditionalFieldProvider extends AbstractAdditionalFieldProvider
         // Write the code for the field
         $fieldID = "task_$_key";
 
-        $fieldCode = '<input type="number" ' . ($key->isRequired() ? 'min="0" max="99999" ' : '') . ' class="form-control" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" value="' . htmlspecialchars( $taskInfo[$_key] ). '" ' . ($key->isRequired() ? 'required ' : '') . '>';
+        $fieldCode = '<input type="number" ' . ($key->isRequired() ? 'min="0" max="99999" ' : '') . ' class="form-control" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" value="' . htmlspecialchars($taskInfo[$_key]) . '" ' . ($key->isRequired() ? 'required ' : '') . '>';
         $additionalFields[$fieldID] = [
             'code' => $fieldCode,
             'label' => Mail2NewsAdditionalFieldProvider::TRANSLATION_PREFIX . $_key,
@@ -62,7 +62,7 @@ class Mail2NewsAdditionalFieldProvider extends AbstractAdditionalFieldProvider
         $_key = $key->value;
         // Write the code for the field
         $fieldID = "task_$_key";
-        $fieldCode = '<input type="text" class="form-control" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" value="' . htmlspecialchars( $taskInfo[$_key] ). '" ' . ($key->isRequired() ? 'required ' : '') . '>';
+        $fieldCode = '<input type="text" class="form-control" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" value="' . htmlspecialchars($taskInfo[$_key]) . '" ' . ($key->isRequired() ? 'required ' : '') . '>';
         $additionalFields[$fieldID] = [
             'code' => $fieldCode,
             'label' => Mail2NewsAdditionalFieldProvider::TRANSLATION_PREFIX . $_key,
@@ -76,7 +76,7 @@ class Mail2NewsAdditionalFieldProvider extends AbstractAdditionalFieldProvider
         $_key = $key->value;
         // Write the code for the field
         $fieldID = "task_$_key";
-        $fieldCode = '<textarea  class="form-control" style="font-family: \'DejaVu Sans Mono\', monospace; height: 20em;" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" ' . ($key->isRequired() ? 'required ' : '') . '>' .  $taskInfo[$_key] . '</textarea>';
+        $fieldCode = '<textarea  class="form-control" style="font-family: \'DejaVu Sans Mono\', monospace; height: 20em;" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" ' . ($key->isRequired() ? 'required ' : '') . '>' . $taskInfo[$_key] . '</textarea>';
         $additionalFields[$fieldID] = [
             'code' => $fieldCode,
             'label' => Mail2NewsAdditionalFieldProvider::TRANSLATION_PREFIX . $_key,
@@ -92,7 +92,7 @@ class Mail2NewsAdditionalFieldProvider extends AbstractAdditionalFieldProvider
         $_key = $key->value;
         // Write the code for the field
         $fieldID = "task_$_key";
-        $fieldCode = '<input type="password" class="form-control" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" value="' . htmlspecialchars( $taskInfo[$_key]) . '" ' . ($key->isRequired() ? 'required ' : '') . '>';
+        $fieldCode = '<input type="password" class="form-control" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" value="' . htmlspecialchars($taskInfo[$_key]) . '" ' . ($key->isRequired() ? 'required ' : '') . '>';
         $additionalFields[$fieldID] = [
             'code' => $fieldCode,
             'label' => Mail2NewsAdditionalFieldProvider::TRANSLATION_PREFIX . $_key,
@@ -106,9 +106,11 @@ class Mail2NewsAdditionalFieldProvider extends AbstractAdditionalFieldProvider
     {
         $this->setCurrentKey($taskInfo, $task, $key);
         $_key = $key->value;
+        debug($key->convert2data( $taskInfo[$_key]));
         // Write the code for the field
         $fieldID = "task_$_key";
-        $fieldCode = '<input type="checkbox" class="form-check" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" value="true" ' . ($taskInfo[$_key] ? 'checked' : '') . ' ' . ($key->isRequired() ? 'required ' : '') . '>';
+        $fieldCode = '<input type="hidden"  name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" value="false" >'.
+        '<input type="checkbox" class="form-check" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" value="true" ' . ($key->convert2data( $taskInfo[$_key]) ? 'checked' : '') . ' ' . ($key->isRequired() ? 'required ' : '') . '>';
         $additionalFields[$fieldID] = [
             'code' => $fieldCode,
             'label' => Mail2NewsAdditionalFieldProvider::TRANSLATION_PREFIX . $_key,

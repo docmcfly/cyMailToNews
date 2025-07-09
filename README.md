@@ -2,6 +2,7 @@
 
 ## Change log
 
+* 0.9.6 FIX : Checkbox in the scheduler configuration works as expected. 
 * 0.9.5 CHG : Change the extension icon.
 * 0.9.4 FIX : Manipulation rules for the news content rendering.
 * 0.9.3 FIX : htmlspecialchars encoding / decoding

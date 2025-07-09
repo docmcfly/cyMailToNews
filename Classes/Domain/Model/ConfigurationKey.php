@@ -39,14 +39,14 @@ enum ConfigurationKey: string
             self::IMAP_PORT => intval($string),
             self::DEFAULT_MEDIA => intval($string),
             self::FILE_STORAGE => intval($string),
-            self::ALLOWED_ATTACHMENT_TYPES => explode(',',str_replace(" ", "", $string)),
-            self::IMPORT_ATTACHMENTS => boolval($string),
-            self::DRAFT_MODE => boolval($string),
+            self::ALLOWED_ATTACHMENT_TYPES => explode(',', str_replace(" ", "", $string)),
+            self::IMPORT_ATTACHMENTS => $string === 'true',
+            self::DRAFT_MODE => $string === 'true',
             default => $string
         };
-    } 
+    }
 
-    public function isRequired():bool 
+    public function isRequired(): bool
     {
         return match ($this) {
             self::NEWS_STORAGE_PAGE_ID => true,
@@ -55,7 +55,7 @@ enum ConfigurationKey: string
             self::IMAP_ACCOUNT => true,
             self::IMAP_PASSWORD => true,
             default => false
-        }; 
+        };
     }
 
 
