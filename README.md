@@ -2,6 +2,7 @@
 
 ## Change log
 
+* 0.9.7 FIX : Fix the attachment folder validation.
 * 0.9.6 FIX : Checkbox in the scheduler configuration works as expected. 
 * 0.9.5 CHG : Change the extension icon.
 * 0.9.4 FIX : Manipulation rules for the news content rendering.

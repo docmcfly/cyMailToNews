@@ -90,7 +90,6 @@ class Mail2NewsAdditionalFieldProvider extends AbstractAdditionalFieldProvider
     {
         $this->setCurrentKey($taskInfo, $task, $key);
         $_key = $key->value;
-        // Write the code for the field
         $fieldID = "task_$_key";
         $fieldCode = '<input type="password" class="form-control" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" value="' . htmlspecialchars($taskInfo[$_key]) . '" ' . ($key->isRequired() ? 'required ' : '') . '>';
         $additionalFields[$fieldID] = [
@@ -106,8 +105,6 @@ class Mail2NewsAdditionalFieldProvider extends AbstractAdditionalFieldProvider
     {
         $this->setCurrentKey($taskInfo, $task, $key);
         $_key = $key->value;
-        debug($key->convert2data( $taskInfo[$_key]));
-        // Write the code for the field
         $fieldID = "task_$_key";
         $fieldCode = '<input type="hidden"  name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" value="false" >'.
         '<input type="checkbox" class="form-check" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" value="true" ' . ($key->convert2data( $taskInfo[$_key]) ? 'checked' : '') . ' ' . ($key->isRequired() ? 'required ' : '') . '>';
@@ -321,7 +318,7 @@ class Mail2NewsAdditionalFieldProvider extends AbstractAdditionalFieldProvider
         $result &= $this->validateCategoryRulesField($submittedData, ConfigurationKey::CATEGORY_RULES);
         $result &= $this->validateFilterRulesField($submittedData, ConfigurationKey::FILTER_RULES);
 
-        if ($this->get_submitted_data($submittedData, ConfigurationKey::IMPORT_ATTACHMENTS)) {
+        if (ConfigurationKey::IMPORT_ATTACHMENTS->convert2data( $this->get_submitted_data($submittedData, ConfigurationKey::IMPORT_ATTACHMENTS))) {
             $result &= $this->validateRequiredField($submittedData, ConfigurationKey::ATTACHMENT_FOLDER)
                 && $this->validateExistsFolderField($submittedData, ConfigurationKey::ATTACHMENT_FOLDER);
             $result &= $this->validateRequiredField($submittedData, ConfigurationKey::ALLOWED_ATTACHMENT_TYPES);

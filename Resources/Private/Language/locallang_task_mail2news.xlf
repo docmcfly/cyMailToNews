@@ -74,12 +74,24 @@
 			<trans-unit id="task.mail2news.property.error.categoryUidNotFound.categoryRules">
 				<source>A category with the UID % not found.</source>
 			</trans-unit>
-			<trans-unit id="task.mail2news.property.error.wrongSourceKey.categoryRules">
-				<source>Only the sources "subject" or "content" are allowed.</source>
+			<trans-unit id="task.mail2news.property.error.wrongRuleDeclaration.categoryRules">
+				<source>The declaration of the category rules is incorrect. Format: [ 'subject|content' =&gt; 'regular expression' ]</source>
 			</trans-unit>
 			<trans-unit id="task.mail2news.property.error.invalidRule.categoryRules">
 				<source>The rules (regular expression) %s are invalid.</source>
 			</trans-unit>
+
+			<trans-unit id="task.mail2news.property.error.jsonInvalid.filterRules">
+				<source>The filter rules have not an valid json format.</source>
+			</trans-unit>
+			<trans-unit id="task.mail2news.property.error.invalidRule.filterRules">
+				<source>The rules (regular expression) %s are invalid.</source>
+			</trans-unit>
+
+			<trans-unit id="task.mail2news.property.error.folderNotExists.attachmentFolder">
+				<source>The folder "%s" does not exists.</source>
+			</trans-unit>
+
 			<trans-unit id="task.mail2news.property.error.required.imapServer">
 				<source>The imap server name is required.</source>
 			</trans-unit>
@@ -92,6 +104,7 @@
 			<trans-unit id="task.mail2news.property.error.required.imapPassword">
 				<source>The imap password is required.</source>
 			</trans-unit>
+
 
 		</body>
 	</file>
