@@ -173,16 +173,15 @@ class Mail2NewsTask extends AbstractTask
                     }
                     $this->newsRepository->add($n);
                     $this->persistenceManager->persistAll();
+                } else {
+                    imap_clearflag_full($inbox, $email_number, '\\Seen', ST_UID);
                 }
-                //                $overview = imap_fetch_overview($inbox, $email_number, 0);
-                imap_clearflag_full($inbox, $email_number, '\\Seen', ST_UID);
             }
         }
 
         imap_close($inbox);
 
 
-        $this->persistenceManager->persistAll();
         return true;
     }
 
