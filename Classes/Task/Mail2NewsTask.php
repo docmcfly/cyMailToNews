@@ -68,7 +68,6 @@ class Mail2NewsTask extends AbstractTask
     public function execute(): bool
     {
         $this->init();
-        debug($this->configuration);
         $hostname = '{' . $this->get(ConfigurationKey::IMAP_SERVER) . ':' . $this->get(ConfigurationKey::IMAP_PORT) . '/imap/ssl}INBOX';
         $inbox = imap_open($hostname, $this->get(ConfigurationKey::IMAP_ACCOUNT), $this->get(ConfigurationKey::IMAP_PASSWORD))
             or die('Verbindung fehlgeschlagen: ' . imap_last_error());
@@ -81,7 +80,6 @@ class Mail2NewsTask extends AbstractTask
 
 
                 $header = $this->parseMailHeaders(imap_fetchheader($inbox, $email_number));
-
                 $structure = imap_fetchstructure($inbox, $email_number);
                 $bodies = $this->get_bodies($inbox, $email_number, $structure);
 
@@ -93,19 +91,20 @@ class Mail2NewsTask extends AbstractTask
                         || (isset($header['Importance']) && strtolower($header['Importance']) === 'high')
                         || (isset($header['X-MSMail-Priority']) && strtolower($header['X-MSMail-Priority']) === 'high');
 
-
-
-
                     /** @var News */
                     $n = new News();
+
+                    $n->setHidden($this->get_data(ConfigurationKey::DRAFT_MODE));
 
                     $categories = $this->addCategories($n, $header, $bodies);
 
 
                     $n->setType(0);
                     $n->setIstopnews($highPrio);
-                    $n->setTitle($this->render($this->get(ConfigurationKey::TITLE_TEMPLATE), $header, $bodies, $categories));
-                    $n->setBodytext($this->render($this->get(ConfigurationKey::BODY_TEXT_TEMPLATE), $header, $bodies, $categories));
+                    $title = htmlspecialchars_decode($this->render($this->get(ConfigurationKey::TITLE_TEMPLATE), $header, $bodies, $categories));
+                    $n->setTitle(empty(trim($title)) ? 'none title ' : $title);
+                    $bodyText = $this->clean_html($this->render($this->get(ConfigurationKey::BODY_TEXT_TEMPLATE), $header, $bodies, $categories));
+                    $n->setBodytext($bodyText);
                     $n->setPid($this->get(ConfigurationKey::NEWS_STORAGE_PAGE_ID));
                     $n->setDatetime($date);
 
@@ -172,11 +171,8 @@ class Mail2NewsTask extends AbstractTask
 
 
                     }
-
-
-
                     $this->newsRepository->add($n);
-
+                    $this->persistenceManager->persistAll();
                 }
                 //                $overview = imap_fetch_overview($inbox, $email_number, 0);
                 imap_clearflag_full($inbox, $email_number, '\\Seen', ST_UID);
@@ -193,7 +189,7 @@ class Mail2NewsTask extends AbstractTask
     private function is_file_type_allowed(string $type): bool
     {
         $type = trim(strtolower($type));
-        foreach ($this->get(ConfigurationKey::ALLOWED_ATTACHMENT_TYPES) as $allowed_type) {
+        foreach ($this->get_data(ConfigurationKey::ALLOWED_ATTACHMENT_TYPES) as $allowed_type) {
             if (trim(strtolower($allowed_type)) === $type) {
                 return true;
             }
@@ -252,8 +248,11 @@ class Mail2NewsTask extends AbstractTask
 
     private function clean_html(string $html): string
     {
-
-        $html = substr($html, stripos($html, '<body'));
+        $bodyPos = stripos($html, '<body');
+        if ($bodyPos === false) {
+            return $html;
+        }
+        $html = substr($html, $bodyPos);
         $html = substr($html, 0, strripos($html, '</body'));
         $html = preg_replace('/<body([^>]*)>/is', '', $html);
         return $html;
@@ -261,40 +260,53 @@ class Mail2NewsTask extends AbstractTask
 
 
     // Funktion zum Extrahieren von Attachments
-    private function extract_bodies($inbox, $email_id, $structure, $part_number = 0): array
-    {
-        $bodies = [
+    private function extract_bodies(
+        $inbox,
+        $email_id,
+        $structure,
+        $part_number = 0,
+        &$plain_found_on = 0,
+        &$bodies = [
             'plain' => ['content' => ''],
             'html' => ['content' => ''],
             'auto' => ['content' => ''],
-        ];
+        ]
+    ): array {
+
 
         if (isset($structure->parts) && is_array($structure->parts)) {
-            // find plain text part
             foreach ($structure->parts as $key => $part) {
                 $current_part_number = $part_number ? $part_number . '.' . ($key + 1) : ($key + 1);
-                if (!isset($bodies['plain']['part_number']) && $part->type == 0 && $part->ifsubtype && strtolower($part->subtype) === 'plain') {
+                if ( // PLAIN
+                    !isset($bodies['plain']['part_number'])
+                    && $part->type == 0
+                    && $part->ifsubtype
+                    && strtolower($part->subtype) === 'plain'
+                ) {
                     $bodies['plain']['part_number'] = $current_part_number;
                     $bodies['plain']['type'] = $part->type;
                     $bodies['plain']['encoding'] = $part->encoding;
-                    //      debug($bodies, 'add');
-                    break;
+                    $plain_found_on = $part_number;
                 }
-                if (isset($part->parts) && is_array($part->parts)) {
-                    $bodies = array_merge($bodies, $this->extract_bodies($inbox, $email_id, $part, $current_part_number));
-                }
-            }
-            // find html text part
-            foreach ($structure->parts as $key => $part) {
-                $current_part_number = $part_number ? $part_number . '.' . ($key + 1) : ($key + 1);
-                if (!isset($bodies['html']['part_number']) && $part->type == 0 && $part->ifsubtype && strtolower($part->subtype) === 'html') {
+
+                if ( // HTML
+                    $plain_found_on == $part_number
+                    && !isset($bodies['html']['part_number'])
+                    && $part->type == 0
+                    && $part->ifsubtype
+                    && strtolower($part->subtype) === 'html'
+                ) {
                     $bodies['html']['part_number'] = $current_part_number;
                     $bodies['html']['type'] = $part->type;
                     $bodies['html']['encoding'] = $part->encoding;
-                    break;
                 }
-                if (isset($part->parts) && is_array($part->parts)) {
-                    $bodies = array_merge($bodies, $this->extract_bodies($inbox, $email_id, $part, $current_part_number));
+
+                if (
+                    !isset($bodies['plain']['part_number'])
+                    && isset($part->parts)
+                    && is_array($part->parts)
+                ) {
+                    $this->extract_bodies($inbox, $email_id, $part, $current_part_number, $plain_found_on, $bodies);
                 }
             }
         }
@@ -321,7 +333,7 @@ class Mail2NewsTask extends AbstractTask
                         }
                     }
                 }
-                if (isset($part->parts) && is_array($part->parts)) {
+                if ($structure->ifsubtype && $structure->subtype !== 'ALTERNATIVE' && isset($part->parts) && is_array($part->parts)) {
                     $attachments = array_merge($attachments, $this->extract_attachments($inbox, $email_id, $part, $current_part_number));
                 }
             }
@@ -344,17 +356,64 @@ class Mail2NewsTask extends AbstractTask
         return $attachments;
     }
 
+    private function decodeMimeWord($encodedText)
+    {
+        // Entferne das MIME-encoded-Word-Präfix und Suffix
+        if (preg_match('/=\?([^?]+)\?([QqBb])\?(.+)\?=/', $encodedText, $matches)) {
+            $encoding = $matches[2];
+            $encodedString = $matches[3];
+
+            if ($encoding == 'Q' || $encoding == 'q') {
+                // Quoted-Printable Dekodierung
+                $decodedString = quoted_printable_decode(str_replace('_', ' ', $encodedString));
+            } elseif ($encoding == 'B' || $encoding == 'b') {
+                // Base64 Dekodierung
+                $decodedString = base64_decode($encodedString);
+            } else {
+                return $encodedText; // Unbekannte Kodierung
+            }
+
+            // Konvertiere den dekodierten String in HTML-Entitäten
+            return htmlentities($decodedString, ENT_QUOTES, 'UTF-8');
+        }
+
+        return $encodedText; // Keine MIME-encoded-Word-Kodierung gefunden
+    }
+
+    private function decodeSubject($subject)
+    {
+        // Teile das Subject in MIME-encoded-Word und den restlichen Text
+        $parts = preg_split('/(?<=\?=) /', $subject);
+        $decodedParts = [];
+
+        foreach ($parts as $part) {
+            if (preg_match('/=\?([^?]+)\?([QqBb])\?(.+)\?=/', $part)) {
+                $decodedParts[] = $this->decodeMimeWord($part);
+            } else {
+                $decodedParts[] = htmlentities($part, ENT_QUOTES, 'UTF-8');
+            }
+        }
+
+        return implode(' ', $decodedParts);
+    }
+
 
     private function render(string $template, array $header, array $body, array $categories): string
     {
+        // simple
         $search = [
             '{body}',
             '{bodyHtml}',
             '{bodyPlain}'
         ];
+
+
         $replace = [
-            $body['auto']['type'] == 'html' ? $body['html']['content'] : htmlspecialchars($body['plain']['content']),
-            $body['html']['content'],
+            $body['auto']['type'] == 'html'
+            ? trim(str_replace(["\n\r", "\r", "\n"], ["\n", "\n", " "], $body['html']['content']))
+            : htmlspecialchars($body['plain']['content']),
+
+            trim(str_replace(["\n\r", "\r", "\n"], ["\n", "\n", " "], $body['html']['content'])),
             htmlspecialchars($body['plain']['content']),
         ];
 
@@ -368,14 +427,44 @@ class Mail2NewsTask extends AbstractTask
                 $tmp[] = $c->getTitle();
             }
             $replace[] = implode(",", $tmp);
+        } else {
+            $search[] = '{categoryFirst}';
+            $replace[] = '';
 
+            $search[] = '{categoryList}';
+            $replace[] = '';
         }
 
         foreach ($header as $headerKey => $headerValue) {
             $search[] = '{' . $headerKey . '}';
-            $replace[] = $headerValue;
+            if ($headerKey === 'Subject') {
+                $replace[] = $this->decodeSubject($headerValue);
+            } else {
+                $replace[] = $headerValue;
+            }
         }
-        return str_replace($search, $replace, $template);
+
+        $tmp = str_replace($search, $replace, $template);
+
+        foreach ($search as $c => $s) {
+            $pattern = '/' . substr($s, 0, -1) . ' +pattern="(.+)" +replacement="(.+)" *}/';
+            $matches = [];
+            preg_match($pattern, $tmp, $matches);
+            if (!empty($matches)) {
+                $subPattern = '/' . $matches[1] . '/msu';
+                $subReplacement = $matches[2];
+                $count = 0;
+                $replacement = preg_replace($subPattern, $subReplacement, $replace[$c], -1, $count);
+                if ($count > 0) {
+                    $tmp = str_replace($matches[0], $replacement, $tmp);
+                } else {
+                    $tmp = str_replace($matches[0], $replace[$c], $tmp);
+                }
+            }
+
+        }
+
+        return $tmp;
     }
 
 
@@ -387,7 +476,6 @@ class Mail2NewsTask extends AbstractTask
             $accept = true;
             switch ($source) {
                 case "body":
-                    debug($bodies[$bodies['auto']['type']]['content'], $rule);
                     $accept &= $this->hasMatch($rule, $bodies[$bodies['auto']['type']]['content']);
                     break;
                 case "bodyHtml":
@@ -405,7 +493,6 @@ class Mail2NewsTask extends AbstractTask
 
             }
             if (!$accept) {
-                debug($accept, $source);
                 return false;
             }
 
@@ -421,8 +508,6 @@ class Mail2NewsTask extends AbstractTask
                 trim(str_replace(["\n\r", "\r", "\n"], ["\n", "\n", " "], $text))
             );
     }
-
-
 
     private function parseMailHeaders($rawHeaders): array
     {
@@ -444,37 +529,11 @@ class Mail2NewsTask extends AbstractTask
         return $headers;
     }
 
-    /*
-
-    {
-       "9":{
-          "subject":"^\\d+ H abc\\d? \\w+ .+$",
-          "body":  "^\\d+ H abc\\d? \\w+ .+$",
-          "bodyHtml":  "^\\d+ H abc\\d? \\w+ .+$",
-          "bodyPlain":  "^\\d+ H abc\\d? \\w+ .+$",
-       },
-       "7":{
-          "subject":"^\\d+ B b.?.? \\w+ .+$"
-       },
-       "8":{
-          "subject":"^\\d+ H h.?.? \\w+ .+$"
-       },
-       "130":{
-          "subject":"^\\d+ \\w .+$"
-       }
-
-    }
-
-
-    */
-
-
     private function addCategories(News &$news, array $header, array $bodies): array
     {
         if (empty(trim($this->get_data(ConfigurationKey::CATEGORY_RULES)))) {
             return [];
         }
-        debug($this->get_data(ConfigurationKey::CATEGORY_RULES));
         $categoryRules = json_decode($this->get_data(ConfigurationKey::CATEGORY_RULES), true);
 
         $categories = [];
@@ -535,7 +594,6 @@ class Mail2NewsTask extends AbstractTask
     }
     public function set(array $data): void
     {
-        debug($data);
         foreach (ConfigurationKey::cases() as $key) {
             $this->configuration[$key->value] = isset($data[$key->value]) ? $key->convert2data($data[$key->value]) : $key->getDefault();
         }

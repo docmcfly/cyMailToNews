@@ -47,7 +47,7 @@ class Mail2NewsAdditionalFieldProvider extends AbstractAdditionalFieldProvider
         // Write the code for the field
         $fieldID = "task_$_key";
 
-        $fieldCode = '<input type="number" ' . ($key->isRequired() ? 'min="0" max="99999" ' : '') . ' class="form-control" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" value="' . $taskInfo[$_key] . '" ' . ($key->isRequired() ? 'required ' : '') . '>';
+        $fieldCode = '<input type="number" ' . ($key->isRequired() ? 'min="0" max="99999" ' : '') . ' class="form-control" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" value="' . htmlspecialchars( $taskInfo[$_key] ). '" ' . ($key->isRequired() ? 'required ' : '') . '>';
         $additionalFields[$fieldID] = [
             'code' => $fieldCode,
             'label' => Mail2NewsAdditionalFieldProvider::TRANSLATION_PREFIX . $_key,
@@ -62,7 +62,7 @@ class Mail2NewsAdditionalFieldProvider extends AbstractAdditionalFieldProvider
         $_key = $key->value;
         // Write the code for the field
         $fieldID = "task_$_key";
-        $fieldCode = '<input type="text" class="form-control" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" value="' . $taskInfo[$_key] . '" ' . ($key->isRequired() ? 'required ' : '') . '>';
+        $fieldCode = '<input type="text" class="form-control" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" value="' . htmlspecialchars( $taskInfo[$_key] ). '" ' . ($key->isRequired() ? 'required ' : '') . '>';
         $additionalFields[$fieldID] = [
             'code' => $fieldCode,
             'label' => Mail2NewsAdditionalFieldProvider::TRANSLATION_PREFIX . $_key,
@@ -76,7 +76,7 @@ class Mail2NewsAdditionalFieldProvider extends AbstractAdditionalFieldProvider
         $_key = $key->value;
         // Write the code for the field
         $fieldID = "task_$_key";
-        $fieldCode = '<textarea  class="form-control" style="font-family: \'DejaVu Sans Mono\', monospace; height: 20em;" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" ' . ($key->isRequired() ? 'required ' : '') . '>' . $taskInfo[$_key] . '</textarea>';
+        $fieldCode = '<textarea  class="form-control" style="font-family: \'DejaVu Sans Mono\', monospace; height: 20em;" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" ' . ($key->isRequired() ? 'required ' : '') . '>' .  $taskInfo[$_key] . '</textarea>';
         $additionalFields[$fieldID] = [
             'code' => $fieldCode,
             'label' => Mail2NewsAdditionalFieldProvider::TRANSLATION_PREFIX . $_key,
@@ -92,7 +92,7 @@ class Mail2NewsAdditionalFieldProvider extends AbstractAdditionalFieldProvider
         $_key = $key->value;
         // Write the code for the field
         $fieldID = "task_$_key";
-        $fieldCode = '<input type="password" class="form-control" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" value="' . $taskInfo[$_key] . '" ' . ($key->isRequired() ? 'required ' : '') . '>';
+        $fieldCode = '<input type="password" class="form-control" name="tx_scheduler[' . $_key . ']" id="' . $fieldID . '" value="' . htmlspecialchars( $taskInfo[$_key]) . '" ' . ($key->isRequired() ? 'required ' : '') . '>';
         $additionalFields[$fieldID] = [
             'code' => $fieldCode,
             'label' => Mail2NewsAdditionalFieldProvider::TRANSLATION_PREFIX . $_key,
@@ -281,7 +281,6 @@ class Mail2NewsAdditionalFieldProvider extends AbstractAdditionalFieldProvider
                     $tmp = '"' . $regEx . '"';
                     try {
                         if (preg_match("/$regEx/", null) === false) {
-                            debug($tmp);
                             return $this->addErrorMessage('invalidRule', $key, params: $tmp);
                         }
                     } catch (\Exception $exception) {
@@ -289,7 +288,6 @@ class Mail2NewsAdditionalFieldProvider extends AbstractAdditionalFieldProvider
                     }
                 }
             }
-            debug(true);
             return true;
         } catch (\Exception $e) {
             debug($e);
@@ -324,7 +322,6 @@ class Mail2NewsAdditionalFieldProvider extends AbstractAdditionalFieldProvider
         if ($this->get_submitted_data($submittedData, ConfigurationKey::IMPORT_ATTACHMENTS)) {
             $result &= $this->validateRequiredField($submittedData, ConfigurationKey::ATTACHMENT_FOLDER)
                 && $this->validateExistsFolderField($submittedData, ConfigurationKey::ATTACHMENT_FOLDER);
-            debug($result);
             $result &= $this->validateRequiredField($submittedData, ConfigurationKey::ALLOWED_ATTACHMENT_TYPES);
 
         }
