@@ -115,6 +115,10 @@
 				<target state="tanslated">Die Regel (Regulärer Ausdruck) %s ist ungültig.</target>
 			</trans-unit>
 
+			<trans-unit id="task.mail2news.property.error.folderNotExists.attachmentFolder">
+				<source>The folder "%s" does not exists.</source>
+				<target state="tanslated">Der Datei-Ordner "%s" existiert nicht.</target>
+			</trans-unit>
 
 			<trans-unit id="task.mail2news.property.error.required.imapServer">
 				<source>The imap server name is required.</source>
