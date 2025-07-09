@@ -160,7 +160,7 @@ class Mail2NewsTask extends AbstractTask
                             $defaultMediaFile = $this->resourceFactory->getFileObject($this->get(ConfigurationKey::DEFAULT_MEDIA));
                             $fr = new FileReference();
                             $fr->setFileUid($defaultMediaFile->getUid());
-                            $fr->setShowinpreview(FileReference::VIEW_LIST_AND_DETAIL);
+                            $fr->setShowinpreview(FileReference::VIEW_LIST_ONLY);
                             $fr->setTitle($defaultMediaFile->getName());
                             $fr->setDescription(null);
                             $fr->setAlternative(null);
