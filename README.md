@@ -2,6 +2,7 @@
 
 ## Change log
 
+* 0.9.11 FIX : Compose requirment: "georgringer/news" : ">=12.3.0"
 * 0.9.10 FIX : Remove warning in the get data metod.
 * 0.9.9  FIX : Default media is displayed only in the list view.
 * 0.9.8  FIX : Fix the mail seen flag handling.
