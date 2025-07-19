@@ -297,7 +297,7 @@ class Mail2NewsAdditionalFieldProvider extends AbstractAdditionalFieldProvider
 
     private function get_submitted_data(array &$submittedData, ConfigurationKey $key): mixed
     {
-        return $submittedData[$key->value];
+        return isset($submittedData[$key->value]) ? $submittedData[$key->value] : $key->getDefault();
     }
 
 
