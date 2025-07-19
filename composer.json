@@ -1,5 +1,5 @@
 {
-  "name": "clyancer/cy_mail_to_news",
+  "name": "cylancer/cy_mail_to_news",
   "type": "typo3-cms-extension",
   "license": "GPL-2.0-or-later",
   "description": "Creates news from mails",

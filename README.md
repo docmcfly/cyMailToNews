@@ -2,16 +2,17 @@
 
 ## Change log
 
-* 0.9.9 FIX : Default media is displayed only in the list view.
-* 0.9.8 FIX : Fix the mail seen flag handling.
-* 0.9.7 FIX : Fix the attachment folder validation.
-* 0.9.6 FIX : Checkbox in the scheduler configuration works as expected.
-* 0.9.5 CHG : Change the extension icon.
-* 0.9.4 FIX : Manipulation rules for the news content rendering.
-* 0.9.3 FIX : htmlspecialchars encoding / decoding
-* 0.9.2 FIX : Fix the mail part analyse (mail in mail problem)
-* 0.9.1 alpha version
-* 0.9.0 INIT initial
+* 0.9.10 FIX : Remove warning in the get data metod.
+* 0.9.9  FIX : Default media is displayed only in the list view.
+* 0.9.8  FIX : Fix the mail seen flag handling.
+* 0.9.7  FIX : Fix the attachment folder validation.
+* 0.9.6  FIX : Checkbox in the scheduler configuration works as expected.
+* 0.9.5  CHG : Change the extension icon.
+* 0.9.4  FIX : Manipulation rules for the news content rendering.
+* 0.9.3  FIX : htmlspecialchars encoding / decoding
+* 0.9.2  FIX : Fix the mail part analyse (mail in mail problem)
+* 0.9.1  UPD : Alpha version
+* 0.9.0  INI : Initial
 
 ## Templates
 
