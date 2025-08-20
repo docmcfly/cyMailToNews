@@ -556,7 +556,7 @@ class Mail2NewsTask extends AbstractTask
                             $accept &= false;
                             break;
                         }
-                        $accept &= $this->hasMatch($rule, $$header[$source]);
+                        $accept &= $this->hasMatch($rule, $header[$source]);
                 }
             }
             if ($accept) {
