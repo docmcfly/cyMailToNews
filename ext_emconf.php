@@ -4,7 +4,7 @@ $EM_CONF[$_EXTKEY] = [
     'title' => 'Mails to news',
     'description' => 'Creates news from emails',
     'category' => 'plugin',
-    'version' => '0.9.12',
+    'version' => '1.0.0',
     'state' => 'beta',
     'clearCacheOnLoad' => 1,
     'author' => 'Clemens Gogolin',
@@ -12,7 +12,7 @@ $EM_CONF[$_EXTKEY] = [
     'constraints' => [
         'depends' => [
             'typo3' => '13.4.00-13.4.99',
-            'news' => '12.3.0-12.3.99',
+            'news' => '12.3.0-14.0.99',
         ],
         'conflicts' => [],
         'suggests' => [],

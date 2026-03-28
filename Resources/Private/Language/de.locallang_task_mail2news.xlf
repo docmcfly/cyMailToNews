@@ -94,7 +94,7 @@
 				<target state="tanslated">Die Kategorie-Regeln haben kein gültiges JSON-Format.</target>
 			</trans-unit>
 			<trans-unit id="task.mail2news.property.error.categoryUidNotFound.categoryRules">
-				<source>A category with the UID % not found.</source>
+				<source>A category with the UID %s not found.</source>
 				<target state="tanslated">Keine Kategorie mit der UID %s nicht gefunden.</target>
 			</trans-unit>
 			<trans-unit id="task.mail2news.property.error.wrongRuleDeclaration.categoryRules">
