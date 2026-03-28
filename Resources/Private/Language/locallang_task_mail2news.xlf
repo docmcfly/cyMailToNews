@@ -72,7 +72,7 @@
 				<source>The category rules have not an valid json format.</source>
 			</trans-unit>
 			<trans-unit id="task.mail2news.property.error.categoryUidNotFound.categoryRules">
-				<source>A category with the UID % not found.</source>
+				<source>A category with the UID %s not found.</source>
 			</trans-unit>
 			<trans-unit id="task.mail2news.property.error.wrongRuleDeclaration.categoryRules">
 				<source>The declaration of the category rules is incorrect. Format: [ 'subject|content' =&gt; 'regular expression' ]</source>

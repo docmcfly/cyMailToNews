@@ -10,12 +10,10 @@ use GeorgRinger\News\Domain\Repository\NewsRepository;
 
 
 use IMAP\Connection;
-use Symfony\Component\DependencyInjection\Compiler\ResolveFactoryClassPass;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\StorageRepository;
-use TYPO3\CMS\Extbase\Validation\Validator\MimeTypeValidator;
 use TYPO3\CMS\Scheduler\Task\AbstractTask;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -77,7 +75,7 @@ class Mail2NewsTask extends AbstractTask
         if ($emails) {
 
             foreach ($emails as $email_number) {
-
+                
 
                 $header = $this->parseMailHeaders(imap_fetchheader($inbox, $email_number));
                 $structure = imap_fetchstructure($inbox, $email_number);
@@ -98,16 +96,15 @@ class Mail2NewsTask extends AbstractTask
 
                     $categories = $this->addCategories($n, $header, $bodies);
 
-
                     $n->setType(0);
                     $n->setIstopnews($highPrio);
                     $title = htmlspecialchars_decode($this->render($this->get(ConfigurationKey::TITLE_TEMPLATE), $header, $bodies, $categories));
+                    
                     $n->setTitle(empty(trim($title)) ? 'none title ' : $title);
                     $bodyText = $this->clean_html($this->render($this->get(ConfigurationKey::BODY_TEXT_TEMPLATE), $header, $bodies, $categories));
                     $n->setBodytext($bodyText);
                     $n->setPid($this->get(ConfigurationKey::NEWS_STORAGE_PAGE_ID));
                     $n->setDatetime($date);
-
 
                     $setDefaultMedia = $this->get_data(ConfigurationKey::DEFAULT_MEDIA);
 
@@ -173,6 +170,7 @@ class Mail2NewsTask extends AbstractTask
                     }
                     $this->newsRepository->add($n);
                     $this->persistenceManager->persistAll();
+                    imap_setflag_full($inbox, $email_number, '\\Seen');
                 } else {
                     imap_clearflag_full($inbox, $email_number, '\\Seen', ST_UID);
                 }
@@ -442,7 +440,6 @@ class Mail2NewsTask extends AbstractTask
                 $replace[] = $headerValue;
             }
         }
-
         $tmp = str_replace($search, $replace, $template);
 
         foreach ($search as $c => $s) {
@@ -556,7 +553,8 @@ class Mail2NewsTask extends AbstractTask
                             $accept &= false;
                             break;
                         }
-                        $accept &= $this->hasMatch($rule, $header[$source]);
+                        $headerValue = $source === 'Subject' ? $this->decodeSubject($header[$source]): $header[$source];
+                        $accept &= $this->hasMatch($rule, $headerValue);
                 }
             }
             if ($accept) {
