@@ -2,6 +2,7 @@
 
 ## Change log
 
+* 1.0.1  : FIX : Fix the depends version syntax.
 * 1.0.0  : UPD : Release news extension in version 14.
 * 0.9.12 : FIX : Category parser has a small bug.
 * 0.9.11 : FIX : Compose requirment: "georgringer/news" : ">=12.3.0"

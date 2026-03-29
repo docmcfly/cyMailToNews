@@ -2,7 +2,7 @@
   "name": "cylancer/cy_mail_to_news",
   "type": "typo3-cms-extension",
   "license": "GPL-2.0-or-later",
-  "description": "Creates news from mails",
+  "description": "Creates news from emails",
   "authors": [
     {
       "name": "C. Gogolin",
@@ -15,7 +15,7 @@
   ],
   "require": {
     "typo3/cms-core": "^13.4",
-    "georgringer/news" : "^(12.3|13.|14.0)"
+    "georgringer/news" : "^12.3 || ^13 || ^14.0"
   },
   "autoload": {
     "psr-4": {
